@@ -118,7 +118,8 @@ tr:hover td{background:#fdf0f4}
 <div class="tab-bar">
   <button class="tab-btn active" onclick="switchTab('timeline')">📅 Big Day 流程</button>
   <button class="tab-btn" onclick="switchTab('budget')">💰 婚禮開支</button>
-  <button class="tab-btn" onclick="switchTab('checklist')">✅ Checklist</button>
+  <button class="tab-btn" onclick="switchTab('checklist')">✅ 物品清單</button>
+  <button class="tab-btn" onclick="switchTab('prep')">📋 籌備進度</button>
   <button class="tab-btn" onclick="switchTab('contacts')">📞 聯絡人</button>
   <button class="tab-btn" onclick="switchTab('seating')">🪑 席位表</button>
   <button class="tab-btn" onclick="switchTab('guests')">👥 賓客名單</button>
@@ -144,10 +145,18 @@ tr:hover td{background:#fdf0f4}
 
 <!-- CHECKLIST TAB -->
 <div class="tab-content" id="tab-checklist">
-  <div class="section-title">✅ Big Day Checklist</div>
+  <div class="section-title">✅ Big Day 物品清單</div>
   <div class="check-progress"><div class="check-bar" id="checkBar" style="width:0%"></div></div>
   <div id="checkProgress" style="text-align:center;font-size:.85em;color:#999;margin-bottom:16px"></div>
   <div id="checklistContainer"></div>
+</div>
+
+<!-- PREP TAB -->
+<div class="tab-content" id="tab-prep">
+  <div class="section-title">📋 婚禮籌備進度</div>
+  <div class="check-progress"><div class="check-bar" id="prepBar" style="width:0%"></div></div>
+  <div id="prepProgress" style="text-align:center;font-size:.85em;color:#999;margin-bottom:16px"></div>
+  <div id="prepContainer"></div>
 </div>
 
 <!-- CONTACTS TAB -->
@@ -270,12 +279,27 @@ const budget = [
 ];
 
 const checklist = {
-  '婚禮文件': ['結婚申請表','戶籍謄本（新郎）','戶籍謄本（新娘）','身份證（複印）','婚姻介紹書','照片（2寸）'],
-  '婚禮服飾': ['婚紗（主禮服）','換場禮服 D','新郎禮服','伴娘服','皮鞋/高跟鞋','頭紗','婚戒','新娘手花','胸花×6'],
-  '婚禮物品': ['喜帖','謝禮盒','回禮品','紅包袋','婚禮展板','賓客名單','座位表','CD','金器/VSOP'],
-  '婚宴準備': ['確認桌數(13圍)','確認菜單','確認MC','確認音響投影','婚禮遊戲道具','Photobooth 佈置'],
-  '婚禮前一天': ['化妝品及護膚品','婚紗/禮服已 steam','花車確認','攝影師確認','MC 確認','最後 rundown check'],
-  '婚禮當天': ['化妝師到場','新郎車隊集合','遊戲道具就緒','頭紗','敬茶茶具','婚宴場地確認']
+  '新郎個人物品 (伴郎跟身)': ['身份證','手提電話','結婚介子','開門利是','工作人員利是'],
+  '新娘個人物品 (伴娘跟身)': ['身份證','手提電話','工作人員利是'],
+  '金器袋 (伴郎跟身)': ['金器袋、金器、金器盒'],
+  '襟花 (姊妹3)': ['主婚人襟花','絲花襟花及手花 (後備)'],
+  '敬茶物品 (姊妹3)': ['茶葉、糖蓮子、紅棗、紅杯仔'],
+  '個人物品袋 (姊妹4)': ['Nude Bra, 修肚褲','便服及鞋','藥 (頭痛, 鼻敏感, 皮膚)','卸妝水, 化妝棉','眼藥水, 膠布','濕紙巾','雙面膠紙, 扣針, 針線','棉花棒, Cream','飲管'],
+  '文具 (兄弟1)': ['原子筆 / 油性Marker','Label','A4紙','雙面膠紙','膠紙 / 皺紋膠紙','𠝹刀','較剪','繩','Blu-Tack'],
+  '證婚用品 (兄弟2)': ['結婚證書套 (Tiffany Blue)','証婚簽名筆'],
+  'Reception (兄弟3)': ['金銀簽名筆 x6','禮物袋 x2 + Label + 人情袋 x2 (收禮用)','佈置公仔','賓客名單 x6','利是封 (備用)','簽名布'],
+  'Audio & Lighting (兄弟4)': ['歌CD'],
+  '服飾安排': [
+    '新娘褂、繡花鞋 (褂) — 早上著住，著完拎去男家',
+    '新郎馬褂 — 早上著住，著完拎去男家',
+    '新娘金晚裝 + 披肩 (迎賓) — 男家換完外影再帶去酒樓',
+    '新郎踢死兔禮服下身 — 早上著住，著去男家',
+    '新娘婚紗、頭紗、銀色高踭鞋 — 早一天放在酒樓',
+    '新郎踢死兔禮服上身 — 早一天放在酒樓',
+    '新娘大紅色晚裝 (敬酒) — 早一天放在酒樓',
+    '新娘家姐晚裝 — 早一天放在酒樓',
+    '新郎媽媽晚裝 (紫) — 早一天放在酒樓',
+  ],
 };
 
 const contacts = [
@@ -475,7 +499,118 @@ function switchTab(name){
   event.target.classList.add('active');
 }
 
-renderTimeline();renderBudget();renderChecklist();renderContacts();renderSeating();renderGuests();
+const prepData = {
+  '6~12個月前': [
+    {task:'安排雙方家長會面', done:true},
+    {task:'決定婚禮形式及行禮地點', done:true},
+    {task:'商量聘禮及禮金數目', done:true},
+    {task:'決定婚宴日期及地點', done:true},
+    {task:'擇定結婚日期', done:true},
+    {task:'預訂酒席', done:true},
+    {task:'制定婚禮開支預算', done:true},
+    {task:'美容、美髮及皮膚護理計劃', done:true},
+  ],
+  '6個月前': [
+    {task:'搜集及落實攝錄攝影公司', done:true},
+    {task:'搜集及落實婚紗店、裙褂店', done:true},
+    {task:'搜集及落實場地佈置公司', done:true},
+    {task:'搜集及落實化妝師', done:true},
+    {task:'拍攝婚紗照', done:true},
+  ],
+  '3個月前': [
+    {task:'設計及印製喜帖', done:true},
+    {task:'排期註冊', done:true},
+    {task:'辦理擬結婚通知書', done:true},
+    {task:'列出婚禮及婚宴邀客名單', done:true},
+    {task:'訂造結婚戒指', done:true},
+    {task:'訂造或預租晚裝', done:true},
+    {task:'選新郎禮服，預租裙褂', done:true},
+    {task:'替雙方家長訂造禮服', done:true},
+    {task:'婚前檢查', done:false},
+    {task:'計劃蜜月旅行地點及財政預算', done:true},
+    {task:'組織婚禮籌備委員會分配職位及工作', done:true},
+  ],
+  '2個月前': [
+    {task:'預約花車', done:true},
+    {task:'預備回禮小禮品', done:true},
+    {task:'計劃婚禮場地佈置', done:true},
+    {task:'試妝、試頭', done:true},
+    {task:'召開籌委會會議', done:false},
+    {task:'選照片作成長片段、選婚禮歌曲', done:true},
+    {task:'訂酒', done:true},
+    {task:'訂兄弟姊妹衫', done:true},
+  ],
+  '1個月前': [
+    {task:'準備婚宴用品', done:true},
+    {task:'製訂結婚程序表及座位表', done:true},
+    {task:'最後確定嘉賓及工作人員名單', done:false},
+    {task:'試穿婚紗、晚裝、裙褂、禮服', done:true},
+    {task:'寄發請帖', done:false},
+  ],
+  '2星期前': [
+    {task:'覆實化妝師、髮型師、攝影師', done:true},
+    {task:'通知酒樓嘉賓人數、確定婚宴菜式', done:false},
+    {task:'婚禮授懽書送交神父/牧師', done:false},
+    {task:'繼續召開會議，觀察工作進度', done:false},
+  ],
+  '1星期前': [
+    {task:'約酒店車位', done:false},
+    {task:'在教堂行禮，作婚前綵排', done:false},
+    {task:'舉行戥穿石聚會', done:false},
+    {task:'舉行姊妹團午宴', done:false},
+    {task:'Final Fitting', done:false},
+  ],
+  '2日前': [
+    {task:'向家長及各工作人員講解結婚當日程序', done:false},
+    {task:'寫台上多謝家人朋友台詞', done:false},
+    {task:'收拾婚禮及婚宴物品、順序排列', done:false},
+    {task:'最後統計婚宴坐位表', done:false},
+    {task:'往美容院護理皮膚、GEL甲', done:false},
+    {task:'預備利是、貼士和各項費用', done:false},
+    {task:'執拾旅行裝備、證件', done:false},
+    {task:'預訂酒樓午膳', done:false},
+  ],
+  '1日前': [
+    {task:'提醒攝影師、化妝師、髮型師', done:false},
+    {task:'收拾婚禮及婚宴物品、順序排列', done:false},
+    {task:'預備敬茶用的茶具和全盒', done:false},
+    {task:'分發婚禮程序表及座位編排圖表', done:false},
+    {task:'由大妗姐或長者為新郎新娘上頭', done:false},
+    {task:'預備利是、貼士和各項費用', done:false},
+    {task:'取花球襟花', done:true},
+    {task:'取婚紗禮服', done:false},
+    {task:'充足睡眠迎接大喜日子', done:false},
+  ],
+};
+
+function renderPrep(){
+  const saved=JSON.parse(localStorage.getItem('wedding_prep')||'{}');
+  let total=0,done=0,html='';
+  Object.entries(prepData).forEach(([period,items])=>{
+    const periodDone=items.filter((it,i)=>(saved[period+':'+i]!==undefined?saved[period+':'+i]:it.done)).length;
+    html+=`<div class="check-group"><h3>🗓 ${period} (${periodDone}/${items.length})</h3>`;
+    items.forEach((it,i)=>{
+      const key=period+':'+i;
+      const checked=saved[key]!==undefined?saved[key]:it.done;
+      if(checked)done++; total++;
+      const sid='prep_'+key.replace(/[^a-z0-9]/gi,'_');
+      html+=`<div class="check-item${checked?' done':''}">
+        <input type="checkbox" id="${sid}" ${checked?'checked':''} onchange="togglePrep('${key}',this.checked)">
+        <label for="${sid}">${it.task}</label>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  document.getElementById('prepContainer').innerHTML=html;
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('prepBar').style.width=pct+'%';
+  document.getElementById('prepProgress').textContent=`已完成 ${done} / ${total} 項（${pct}%）`;
+}
+function togglePrep(key,val){
+  const saved=JSON.parse(localStorage.getItem('wedding_prep')||'{}');
+  saved[key]=val; localStorage.setItem('wedding_prep',JSON.stringify(saved));
+  
+}
 </script>
 </body>
 </html>
