@@ -170,7 +170,7 @@ tr:hover td{background:#fdf0f4}
   <div class="section-title">🪑 席位表 — 共13圍</div>
   <div class="stats-row">
     <div class="stat-box"><div class="v">13</div><div class="l">圍數</div></div>
-    <div class="stat-box"><div class="v">~130</div><div class="l">賓客</div></div>
+    <div class="stat-box"><div class="v">~130+</div><div class="l">賓客</div></div>
     <div class="stat-box"><div class="v">觀塘</div><div class="l">地點</div></div>
   </div>
   <div class="seating-grid" id="seatingGrid"></div>
@@ -316,19 +316,19 @@ const contacts = [
 ];
 
 const seating = [
-  {table:'第1圍（親屬）', guests:['媽媽','爸爸','伯父','伯母','叔叔','舅舅','舅媽','姑媽','表哥','堂妹','堂弟','（備用）']},
-  {table:'第2圍（親屬）', guests:['叔公','叔婆','表姨','表舅','親戚1','親戚2','親戚3','親戚4','親戚5','親戚6','親戚7','（備用）']},
-  {table:'第3圍（朋友1-6號）', guests:['麻鷹','地下鐵','阿圓','阿牛','阿熊','阿豬','阿狗','阿貓','阿魚','（備用）','（備用）','（備用）']},
-  {table:'第4圍（朋友1-6號）', guests:['阿白','阿紫','阿橙','阿黃','阿粉','阿藍','（備用）','（備用）','（備用）','（備用）','（備用）','（備用）']},
-  {table:'第5圍（朋友1-6號）', guests:['THEI Chris Wong','THEI Aries Tang','THEI Ivan Chiu','THEI Fung Tang','WG-Ivan','WG-Ocean','蝦鬚','阿海','金燦燦','銀亮亮','煒仔','（備用）']},
-  {table:'第6圍（FEVAWORKS 1-6）', guests:['Eric Wong','Taylor Yip','Fiona Tang','Candy Fung','Eva Sze','Ling Chan','Ming Chau','Herman Chan','Kent Chan','Terence','（備用）','（備用）']},
-  {table:'第7圍（FEVAWORKS 7-12）', guests:['Kelvin Ma','William','Davy','Miki','Katy','YY','Angel','Venus Wu','胡靜茹','胡秀玲','胡靜怡','（備用）']},
-  {table:'第8圍（朋友）', guests:['陳勤桂（Ran E）','B 阿輝','Angie Kuo','June Tse','阿彩','Henry 阿明','Sandy Yip','吳健明','唐佳傑','林佩文','梁可欣','（備用）']},
-  {table:'第9圍（TINA FD）', guests:['阿梅','阿英','阿珍','陳T','HD-carol','HD-kinson','陳美玲','陳志超','黃美儀','李大文','（備用）','（備用）']},
-  {table:'第10圍（同事）', guests:['Jenny Cheung','Jojo Chitto','友人','Flossie','珊珊','May Leong','Allen Yeung','Henry Lee','Joyce Wong','梁美瑩','（備用）','（備用）']},
-  {table:'第11圍（親友）', guests:['朋友1','朋友2','朋友3','朋友4','朋友5','朋友6','朋友7','朋友8','朋友9','朋友10','（備用）','（備用）']},
-  {table:'第12圍（親友）', guests:['親友1','親友2','親友3','親友4','親友5','親友6','親友7','親友8','親友9','親友10','（備用）','（備用）']},
-  {table:'第13圍（主圍/VIP）', guests:['新郎','新娘','新郎父','新郎母','新娘父','新娘母','Lisa姐','花童','伴郎1','伴娘1','Karu','Kathy']},
+  {table:'第1席', desc:'男家主家席', group:'👨‍👩‍👦 男家', guests:['爸爸','媽媽','細佬','靖嵐（新郎）','千雅（新娘）','大姑媽','大姑丈','二伯爺','大伯娘','細姑媽','細姑丈','紹龍母親']},
+  {table:'第2席', desc:'男家 葉家', group:'👨‍👩‍👦 男家', guests:['大表哥','大表嫂','鄧匡澤','細表哥','堂哥','堂姐','大表姐','細表姐','紹龍細叔','紹龍女友']},
+  {table:'第3席', desc:'男家 葉家', group:'👨‍👩‍👦 男家', guests:['大姐姐','大姐夫','小恩子','外三叔公','外三叔婆','勵文堂舅父','勵文堂舅母','勵生堂舅父','九龍姨媽','九龍姨丈','九龍表哥']},
+  {table:'第4席', desc:'男家 戴家', group:'👨‍👩‍👦 男家', guests:['大姨','大姨丈','細姨','細姨丈','大表弟','BEAR','細表弟','清舅婆','江海倫','江海倫老公','江海倫個仔']},
+  {table:'第5席', desc:'男家 戴家', group:'👨‍👩‍👦 男家', guests:['大舅公','大舅婆','二舅公','三舅公','三舅婆','太舅婆','方姨婆','姨公','姨婆','康表舅父','健表舅父','健表舅母']},
+  {table:'第6席', desc:'男家 朋友', group:'👨‍👩‍👦 男家', guests:['THEI Chris Wong','THEI Aries Tang','THEI Ivan Chiu','THEI Fung Tang','WG-Ivan','WG-Ocean','WG-Jason']},
+  {table:'第7席', desc:'FEVAWORKS', group:'👨‍👩‍👦 男家', guests:['Eric Wong','Taylor Yip','Fiona Tang','Candy Fung','Eva Sze','Ling Chan','Ming Chau','Herman Chan','Kent Chan','Terrence']},
+  {table:'第8席', desc:'FEVAWORKS', group:'👨‍👩‍👦 男家', guests:['Kelvin Ma','William','Davy','Miki','Katy','Shun','YY','Angel','Kit','Venus Wu']},
+  {table:'第9席', desc:'兄弟姊妹團', group:'💐 兄弟姊妹', guests:['邱濃','曾朗','丘匯','由之','呀廖','嘉儀','Lisa姐','彰慧','Karu','Kathy','陳俊杰']},
+  {table:'第10席', desc:'男家朋友', group:'👨‍👩‍👦 男家', guests:['契媽 Ran E','B 豬爸','June E','恆叔叔','Henry 哥哥','Audrey','Sandy E','吹爺叔叔','星叔叔','坤耀叔叔','肥仔旺叔叔','肥仔叔叔']},
+  {table:'第11席', desc:'男家朋友', group:'👨‍👩‍👦 男家', guests:['葉建華','Jenny','Jojo','蘇菲','Fossie','May','Winnie','健哥','契婆','契婆個女','橋昕媽媽','邱濃媽媽']},
+  {table:'第12席', desc:'女家主家席', group:'👩‍👧‍👦 女家', guests:['家姐','姐夫','E生','姐夫媽','姐夫爸','細佬','細佬女友','大姨媽','大姨丈','表哥','表嫂']},
+  {table:'第13席', desc:'女家 TINA FD', group:'👩‍👧‍👦 女家', guests:['高生','丘生','Connie','呀T','Vicky','HD-carol','HD-kinson','佳盈','Shirley','秘書 Katrina','秘書 Maggie','板長']},
 ];
 
 const guests = [
@@ -476,11 +476,22 @@ function renderContacts(){
 }
 
 function renderSeating(){
-  document.getElementById('seatingGrid').innerHTML=seating.map(t=>`
-    <div class="table-card">
-      <h3>🪑 ${t.table}</h3>
-      ${t.guests.map((g,i)=>`<div class="seat-item"><div class="seat-num">${i+1}</div>${g}</div>`).join('')}
-    </div>`).join('');
+  // Group by group label
+  const groups = {};
+  seating.forEach(t=>{ if(!groups[t.group]) groups[t.group]=[]; groups[t.group].push(t); });
+  let html = '';
+  Object.entries(groups).forEach(([grp, tables])=>{
+    html += `<div style="margin-bottom:8px;font-weight:700;color:var(--deep);font-size:1em;padding:6px 0;border-bottom:2px solid var(--blush)">${grp}</div>`;
+    html += '<div class="seating-grid" style="margin-bottom:20px">';
+    tables.forEach(t=>{
+      html += `<div class="table-card">
+        <h3>🪑 ${t.table} <span style="font-weight:400;color:#999;font-size:.85em">· ${t.desc}</span></h3>
+        ${t.guests.map((g,i)=>`<div class="seat-item"><div class="seat-num">${i+1}</div>${g}</div>`).join('')}
+      </div>`;
+    });
+    html += '</div>';
+  });
+  document.getElementById('seatingGrid').innerHTML = html;
 }
 
 function renderGuests(){
