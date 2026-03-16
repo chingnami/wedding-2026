@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💍 Johnny & Tina 的婚禮</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap');
+:root{--rose:#e8a0b0;--deep:#c0607a;--blush:#f9e8ed;--gold:#d4a853;--cream:#fdf6f0;--text:#4a3040;--shadow:rgba(192,96,122,.15)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--text);min-height:100vh}
+
+/* HEADER */
+header{background:linear-gradient(135deg,#c0607a,#e8a0b0,#d4a853);padding:30px 20px 20px;text-align:center}
+header h1{font-family:'Playfair Display',serif;font-size:2em;color:#fff;text-shadow:2px 2px 8px rgba(0,0,0,.2)}
+header p{color:rgba(255,255,255,.9);font-size:.9em;margin-top:6px;letter-spacing:2px}
+
+/* COUNTDOWN */
+.countdown{display:flex;justify-content:center;gap:16px;margin:14px 0 4px;flex-wrap:wrap}
+.cd-box{background:rgba(255,255,255,.25);border-radius:12px;padding:10px 18px;text-align:center;min-width:70px}
+.cd-box .num{font-size:1.8em;font-weight:700;color:#fff;line-height:1}
+.cd-box .lbl{font-size:.7em;color:rgba(255,255,255,.85);margin-top:2px}
+
+/* TABS */
+.tab-bar{display:flex;overflow-x:auto;background:#fff;border-bottom:2px solid var(--blush);padding:0 10px;gap:2px}
+.tab-btn{padding:12px 16px;border:none;background:none;cursor:pointer;font-size:.82em;font-weight:700;color:#999;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s}
+.tab-btn.active{color:var(--deep);border-bottom-color:var(--deep)}
+.tab-btn:hover{color:var(--deep)}
+
+/* CONTENT */
+.tab-content{display:none;padding:20px 15px 60px;max-width:960px;margin:0 auto}
+.tab-content.active{display:block}
+
+/* SECTION TITLE */
+.section-title{font-family:'Playfair Display',serif;font-size:1.3em;color:var(--deep);margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--blush)}
+
+/* CARDS */
+.card{background:#fff;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 4px 16px var(--shadow)}
+.card h3{font-size:1em;color:var(--deep);margin-bottom:8px;font-weight:700}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:24px}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--rose)}
+.tl-item{position:relative;margin-bottom:16px}
+.tl-item::before{content:'';position:absolute;left:-20px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--deep);border:2px solid #fff;box-shadow:0 0 0 2px var(--rose)}
+.tl-time{font-size:.78em;font-weight:700;color:var(--deep);background:var(--blush);display:inline-block;padding:2px 8px;border-radius:20px;margin-bottom:4px}
+.tl-title{font-size:.95em;font-weight:700}
+.tl-desc{font-size:.82em;color:#777;margin-top:3px;white-space:pre-line}
+.tl-roles{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.role-tag{font-size:.7em;background:var(--blush);color:var(--deep);padding:2px 8px;border-radius:20px}
+
+/* BUDGET */
+.budget-summary{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.bsum{flex:1;min-width:120px;background:#fff;border-radius:14px;padding:14px;text-align:center;box-shadow:0 4px 16px var(--shadow);border-top:3px solid var(--rose)}
+.bsum .val{font-size:1.3em;font-weight:700;color:var(--deep)}
+.bsum .lbl{font-size:.72em;color:#999;margin-top:2px}
+table{width:100%;border-collapse:collapse;font-size:.85em}
+th{background:var(--blush);color:var(--deep);padding:8px 10px;text-align:left;font-weight:700}
+td{padding:7px 10px;border-bottom:1px solid #f0e8ec}
+tr:hover td{background:#fdf0f4}
+.pos{color:#27ae60;font-weight:700}
+.neg{color:#e74c3c;font-weight:700}
+.cat-row td{background:#fdf6f0;font-weight:700;color:var(--text)}
+
+/* CHECKLIST */
+.check-group{margin-bottom:20px}
+.check-group h3{font-size:.95em;color:var(--deep);margin-bottom:10px;font-weight:700}
+.check-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f5eaee;cursor:pointer}
+.check-item:last-child{border-bottom:none}
+.check-item input[type=checkbox]{width:18px;height:18px;accent-color:var(--deep);cursor:pointer}
+.check-item label{cursor:pointer;font-size:.9em}
+.check-item.done label{text-decoration:line-through;color:#bbb}
+.check-progress{background:#eee;border-radius:10px;height:8px;margin-bottom:16px;overflow:hidden}
+.check-bar{height:100%;background:linear-gradient(90deg,var(--deep),var(--rose));border-radius:10px;transition:width .4s}
+
+/* CONTACTS */
+.contact-card{background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:10px;box-shadow:0 4px 16px var(--shadow);display:flex;align-items:center;gap:14px}
+.contact-icon{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--deep),var(--rose));display:flex;align-items:center;justify-content:center;font-size:1.3em;flex-shrink:0}
+.contact-info .name{font-weight:700;font-size:.95em}
+.contact-info .role{font-size:.78em;color:#999}
+.contact-info .phone{font-size:.85em;color:var(--deep);margin-top:2px}
+.contact-info a{color:var(--deep);text-decoration:none}
+
+/* SEATING */
+.seating-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.table-card{background:#fff;border-radius:14px;padding:14px;box-shadow:0 4px 16px var(--shadow)}
+.table-card h3{font-size:.9em;color:var(--deep);margin-bottom:8px;font-weight:700;background:var(--blush);padding:6px 10px;border-radius:8px}
+.seat-item{font-size:.83em;padding:4px 0;border-bottom:1px solid #f9f0f4;display:flex;align-items:center;gap:6px}
+.seat-item:last-child{border-bottom:none}
+.seat-num{font-size:.7em;background:var(--rose);color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* GUESTS */
+.guest-search{width:100%;padding:10px 14px;border:2px solid var(--blush);border-radius:12px;font-size:.9em;margin-bottom:14px;outline:none}
+.guest-search:focus{border-color:var(--rose)}
+.guest-table{width:100%;border-collapse:collapse;font-size:.85em}
+.guest-table th{background:var(--blush);color:var(--deep);padding:8px 10px;text-align:left}
+.guest-table td{padding:7px 10px;border-bottom:1px solid #f0e8ec}
+.guest-table tr:hover td{background:#fdf0f4}
+
+/* PROGRESS RING */
+.stats-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.stat-box{flex:1;min-width:100px;background:#fff;border-radius:14px;padding:14px;text-align:center;box-shadow:0 4px 16px var(--shadow)}
+.stat-box .v{font-size:1.6em;font-weight:700;color:var(--deep)}
+.stat-box .l{font-size:.72em;color:#999}
+
+@media(max-width:600px){header h1{font-size:1.5em}.tab-btn{padding:10px 10px;font-size:.75em}}
+</style>
+</head>
+<body>
+
+<header>
+  <p style="font-size:1.1em;letter-spacing:4px">💍 WEDDING</p>
+  <h1>Johnny & Tina</h1>
+  <p>2026年3月28日（六）· 觀塘 · 13圍</p>
+  <div class="countdown" id="countdown"></div>
+</header>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('timeline')">📅 Big Day 流程</button>
+  <button class="tab-btn" onclick="switchTab('budget')">💰 婚禮開支</button>
+  <button class="tab-btn" onclick="switchTab('checklist')">✅ Checklist</button>
+  <button class="tab-btn" onclick="switchTab('contacts')">📞 聯絡人</button>
+  <button class="tab-btn" onclick="switchTab('seating')">🪑 席位表</button>
+  <button class="tab-btn" onclick="switchTab('guests')">👥 賓客名單</button>
+</div>
+
+<!-- TIMELINE TAB -->
+<div class="tab-content active" id="tab-timeline">
+  <div class="section-title">📅 Big Day 流程 — 2026年3月28日（六）</div>
+  <div class="timeline" id="timelineContainer"></div>
+</div>
+
+<!-- BUDGET TAB -->
+<div class="tab-content" id="tab-budget">
+  <div class="section-title">💰 婚禮開支預算</div>
+  <div class="budget-summary" id="budgetSummary"></div>
+  <div class="card" style="overflow-x:auto">
+    <table id="budgetTable">
+      <thead><tr><th>類別</th><th>項目</th><th>預算 ($)</th><th>實際 ($)</th><th>差異 ($)</th></tr></thead>
+      <tbody id="budgetBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- CHECKLIST TAB -->
+<div class="tab-content" id="tab-checklist">
+  <div class="section-title">✅ Big Day Checklist</div>
+  <div class="check-progress"><div class="check-bar" id="checkBar" style="width:0%"></div></div>
+  <div id="checkProgress" style="text-align:center;font-size:.85em;color:#999;margin-bottom:16px"></div>
+  <div id="checklistContainer"></div>
+</div>
+
+<!-- CONTACTS TAB -->
+<div class="tab-content" id="tab-contacts">
+  <div class="section-title">📞 重要聯絡人</div>
+  <div id="contactsContainer"></div>
+</div>
+
+<!-- SEATING TAB -->
+<div class="tab-content" id="tab-seating">
+  <div class="section-title">🪑 席位表 — 共13圍</div>
+  <div class="stats-row">
+    <div class="stat-box"><div class="v">13</div><div class="l">圍數</div></div>
+    <div class="stat-box"><div class="v">~130</div><div class="l">賓客</div></div>
+    <div class="stat-box"><div class="v">觀塘</div><div class="l">地點</div></div>
+  </div>
+  <div class="seating-grid" id="seatingGrid"></div>
+</div>
+
+<!-- GUESTS TAB -->
+<div class="tab-content" id="tab-guests">
+  <div class="section-title">👥 邀請賓客名單</div>
+  <input class="guest-search" type="text" placeholder="🔍 搜尋賓客..." oninput="filterGuests(this.value)">
+  <div style="overflow-x:auto">
+  <table class="guest-table" id="guestTable">
+    <thead><tr><th>#</th><th>姓名</th><th>類別</th><th>席號</th></tr></thead>
+    <tbody id="guestBody"></tbody>
+  </table>
+  </div>
+</div>
+
+<script>
+// ─── DATA ───
+const WEDDING_DATE = new Date('2026-03-28T09:00:00+08:00');
+
+const timeline = [
+  {time:'5:30 am', end:'8:15am', dur:'~2.5hrs', title:'新娘化妝', desc:'新娘開始化妝', roles:['新娘','化妝師','Lisa姐','伴娘×4']},
+  {time:'8:15 am', end:'8:30am', dur:'15mins', title:'出門前準備', desc:'1. 新郎車到，準備接新娘\n2. 確認車隊、伴娘手花、拍照\n3. 準備好所有上車物品', roles:['新娘全體','Gel 帶×5']},
+  {time:'8:30 am', end:'9:30am', dur:'60mins', title:'接新娘遊戲', desc:'過五關斬六將遊戲（60mins），伴郎伴娘準備好', roles:['新郎','伴郎','伴娘']},
+  {time:'9:25 am', end:'9:30am', dur:'5mins', title:'交花球', desc:'新郎到門口，交花球，準備進房', roles:['新郎','新娘','伴郎','伴娘']},
+  {time:'9:30 am', end:'10:00am', dur:'30mins', title:'家人敬茶', desc:'向雙方家長敬茶', roles:['新人全體']},
+  {time:'10:00 am', end:'10:30am', dur:'30mins', title:'遊戲', desc:'接新娘過五關遊戲繼續', roles:['Game Leader','game helper','Facetime圍觀']},
+  {time:'10:30 am', end:'10:45am', dur:'15mins', title:'頭紗儀式', desc:'3個願望（頭紗5個動作），所有親友見證新人甜蜜時刻', roles:['新人','至親好友']},
+  {time:'10:45 am', end:'11:00am', dur:'15mins', title:'換場2', desc:'離開娘家，Pack 行李準備', roles:['所有人']},
+  {time:'11:00 am', end:'11:15am', dur:'15mins', title:'車隊出發前', desc:'確認所有物品、人員到位，準備車隊出發', roles:['全體']},
+  {time:'11:15 am', end:'11:45am', dur:'30mins', title:'迎親車隊', desc:'車隊出發（約30mins路程）', roles:['全體']},
+  {time:'11:45 am', end:'12:15pm', dur:'35mins', title:'到達酒樓', desc:'到達酒樓，7樓電梯拍照', roles:['新人','親友']},
+  {time:'12:15 pm', end:'1:15pm', dur:'1hr', title:'午宴', desc:'婚禮午宴', roles:[]},
+  {time:'12:15 pm', end:'12:30pm', dur:'15mins', title:'迎賓', desc:'新人迎賓站（大廳），拍照', roles:['新人','主持']},
+  {time:'12:30 pm', end:'1:00pm', dur:'30mins', title:'敬酒', desc:'向各桌敬酒', roles:[]},
+  {time:'1:00 pm', end:'2:00pm', dur:'1hr', title:'午宴食飯', desc:'正式午宴用餐', roles:[]},
+  {time:'2:00 pm', end:'2:30pm', dur:'30mins', title:'敬茶', desc:'向雙方長輩敬茶', roles:[]},
+  {time:'2:30 pm', end:'2:45pm', dur:'15mins', title:'換禮服', desc:'新娘換禮服 D（第2套）', roles:['新娘','化妝師']},
+  {time:'2:45 pm', end:'3:30pm', dur:'45mins', title:'婚紗外拍', desc:'外拍婚紗照', roles:['新人','攝影師']},
+  {time:'3:30 pm', end:'6:00pm', dur:'2.5hrs', title:'影婚紗相', desc:'婚紗相拍攝（室內+室外）', roles:['新人','攝影師']},
+  {time:'6:00 pm', end:'7:15pm', dur:'1.25hrs', title:'晚宴準備', desc:'賓客陸續到場，新人化妝補妝，MC 準備', roles:['新人','MC','伴郎伴娘']},
+  {time:'7:15 pm', end:'7:45pm', dur:'30mins', title:'晚宴開始', desc:'正式入場，MC 主持', roles:['新人','MC']},
+  {time:'7:45 pm', end:'8:00pm', dur:'15mins', title:'敬酒/環節', desc:'晚宴敬酒及互動環節', roles:['新人','親友']},
+  {time:'8:00 pm', end:'8:30pm', dur:'~30mins', title:'晚宴用餐', desc:'晚宴正式用餐時段', roles:[]},
+  {time:'8:30 pm', end:'', dur:'', title:'散席', desc:'晚宴尾聲，送客'},
+  {time:'8:45 pm', end:'', dur:'', title:'謝場 (VIP 留底)', desc:'VIP 親友留底拍照'},
+  {time:'9:15 pm', end:'', dur:'', title:'離場', desc:'新人離場'},
+  {time:'9:30 pm', end:'', dur:'~5mins', title:'完結', desc:'婚禮圓滿結束 🎊'},
+];
+
+const budget = [
+  {cat:'場地', item:'場地 - 晚宴', qty:0, unitB:5000, qty2:0, unitA:5000},
+  {cat:'場地', item:'場地 - 午宴', qty:1, unitB:30000, qty2:1, unitA:28598},
+  {cat:'場地', item:'場地(不含酒水/額外費用)', qty:null, unitB:null, qty2:null, unitA:null},
+  {cat:'攝影', item:'攝影師', qty:null, unitB:null, qty2:null, unitA:null},
+  {cat:'攝影', item:'相冊', qty:0, unitB:null, qty2:null, unitA:null},
+  {cat:'攝影', item:'婚紗相', qty:0, unitB:0, qty2:null, unitA:null},
+  {cat:'攝影', item:'婚紗照', qty:130, unitB:10, qty2:130, unitA:10},
+  {cat:'婚紗', item:'婚紗禮服', qty:0, unitB:0, qty2:null, unitA:null},
+  {cat:'婚紗', item:'新郎禮服', qty:null, unitB:null, qty2:null, unitA:null},
+  {cat:'婚紗', item:'旗袍/換裝', qty:null, unitB:null, qty2:null, unitA:null},
+  {cat:'花車', item:'車隊', qty:13, unitB:10000, qty2:13, unitA:9006},
+  {cat:'花車', item:'花球', qty:13, unitB:800, qty2:13, unitA:500},
+  {cat:'花車', item:'汽球佈置', qty:1, unitB:0, qty2:1, unitA:0},
+  {cat:'花車', item:'司機費', qty:1, unitB:600, qty2:1, unitA:0},
+  {cat:'花車', item:'汽油/泊車', qty:1, unitB:0, qty2:1, unitA:7300},
+  {cat:'花車', item:'花車裝飾', qty:1, unitB:3000, qty2:0, unitA:0},
+  {cat:'花車', item:'婚禮MV', qty:1, unitB:0, qty2:1, unitA:0},
+  {cat:'花車', item:'婚禮歌曲', qty:1, unitB:0, qty2:1, unitA:0},
+  {cat:'花車', item:'婚禮片段', qty:0, unitB:0, qty2:0, unitA:0},
+  {cat:'花車', item:'喜帖', qty:1, unitB:0, qty2:1, unitA:0},
+  {cat:'婚宴', item:'婚宴服務', qty:1, unitB:16298, qty2:1, unitA:16298},
+  {cat:'婚宴', item:'西裝', qty:0, unitB:null, qty2:null, unitA:null},
+  {cat:'婚宴', item:'婚鞋', qty:0, unitB:null, qty2:null, unitA:null},
+  {cat:'婚宴', item:'婚禮曲 - 鋼琴', qty:null, unitB:null, qty2:1, unitA:50},
+  {cat:'婚宴', item:'婚禮歌手', qty:null, unitB:null, qty2:null, unitA:null},
+  {cat:'場佈', item:'布置', qty:13, unitB:10000, qty2:13, unitA:9006},
+  {cat:'場佈', item:'花球', qty:13, unitB:800, qty2:13, unitA:500},
+  {cat:'場佈', item:'汽球佈置', qty:1, unitB:0, qty2:1, unitA:0},
+  {cat:'場佈', item:'司儀費', qty:1, unitB:600, qty2:1, unitA:0},
+  {cat:'場佈', item:'投影/音響', qty:1, unitB:0, qty2:1, unitA:7300},
+  {cat:'場佈', item:'主花台', qty:1, unitB:3000, qty2:0, unitA:0},
+  {cat:'場佈', item:'婚禮展板', qty:1, unitB:0, qty2:1, unitA:0},
+  {cat:'場佈', item:'婚禮螢幕', qty:1, unitB:0, qty2:1, unitA:0},
+  {cat:'場佈', item:'心型拱門', qty:0, unitB:0, qty2:0, unitA:0},
+  {cat:'場佈', item:'地毯', qty:1, unitB:0, qty2:1, unitA:0},
+  {cat:'場佈', item:'路引架', qty:1, unitB:0, qty2:1, unitA:0},
+  {cat:'場佈', item:'賓客留言板', qty:1, unitB:0, qty2:null, unitA:null},
+  {cat:'場佈', item:'Photobooth', qty:1, unitB:0, qty2:null, unitA:null},
+  {cat:'其他', item:'MC費用', qty:2, unitB:500, qty2:2, unitA:500},
+  {cat:'其他', item:'婚禮小遊戲', qty:null, unitB:null, qty2:1, unitA:100},
+  {cat:'其他', item:'紅包袋', qty:null, unitB:null, qty2:6, unitA:20},
+  {cat:'其他', item:'謝禮盒', qty:null, unitB:null, qty2:1, unitA:100},
+  {cat:'其他', item:'回禮品', qty:null, unitB:null, qty2:1, unitA:20},
+  {cat:'美容', item:'新娘妝髮', qty:1, unitB:16298, qty2:1, unitA:16298},
+  {cat:'戒指', item:'婚戒', qty:0, unitB:null, qty2:null, unitA:null},
+  {cat:'戒指', item:'求婚戒', qty:0, unitB:null, qty2:null, unitA:null},
+  {cat:'戒指', item:'首飾', qty:null, unitB:null, qty2:null, unitA:null},
+  {cat:'蜜月', item:'機票', qty:0, unitB:null, qty2:null, unitA:null},
+  {cat:'蜜月', item:'酒店', qty:0, unitB:null, qty2:null, unitA:null},
+  {cat:'蜜月', item:'旅遊保', qty:null, unitB:null, qty2:null, unitA:null},
+  {cat:'其他', item:'雜項OT', qty:12, unitB:50, qty2:12, unitA:50},
+  {cat:'其他', item:'化妝師', qty:1, unitB:500, qty2:1, unitA:200},
+  {cat:'其他', item:'wed set花球', qty:1, unitB:500, qty2:1, unitA:100},
+];
+
+const checklist = {
+  '婚禮文件': ['結婚申請表','戶籍謄本（新郎）','戶籍謄本（新娘）','身份證（複印）','婚姻介紹書','照片（2寸）'],
+  '婚禮服飾': ['婚紗（主禮服）','換場禮服 D','新郎禮服','伴娘服','皮鞋/高跟鞋','頭紗','婚戒','新娘手花','胸花×6'],
+  '婚禮物品': ['喜帖','謝禮盒','回禮品','紅包袋','婚禮展板','賓客名單','座位表','CD','金器/VSOP'],
+  '婚宴準備': ['確認桌數(13圍)','確認菜單','確認MC','確認音響投影','婚禮遊戲道具','Photobooth 佈置'],
+  '婚禮前一天': ['化妝品及護膚品','婚紗/禮服已 steam','花車確認','攝影師確認','MC 確認','最後 rundown check'],
+  '婚禮當天': ['化妝師到場','新郎車隊集合','遊戲道具就緒','頭紗','敬茶茶具','婚宴場地確認']
+};
+
+const contacts = [
+  {name:'Johnny（新郎）', role:'新郎', phone:'60742786', email:'chingnami@gmail.com', icon:'🤵'},
+  {name:'Tina（新娘）', role:'新娘', phone:'65415257', email:'tinangai.126@gmail.com', icon:'👰'},
+  {name:'媽媽（新郎）', role:'新郎母親', phone:'55406160', email:'', icon:'👩'},
+  {name:'媽媽（新娘）', role:'新娘母親', phone:'61539939', email:'', icon:'👩'},
+  {name:'Tiffany Ling', role:'花車/場佈', phone:'9253 6507', email:'', icon:'🚗'},
+  {name:'Rose', role:'花球', phone:'6075 4512', email:'', icon:'💐'},
+  {name:'伴郎1', role:'伴郎', phone:'6592 2770', email:'', icon:'🤵'},
+  {name:'Lisa姐', role:'化妝師', phone:'', email:'', icon:'💄'},
+  {name:'婚禮攝影師', role:'攝影', phone:'', email:'', icon:'📷'},
+  {name:'MC（2位）', role:'司儀', phone:'', email:'', icon:'🎤'},
+];
+
+const seating = [
+  {table:'第1圍（親屬）', guests:['媽媽','爸爸','伯父','伯母','叔叔','舅舅','舅媽','姑媽','表哥','堂妹','堂弟','（備用）']},
+  {table:'第2圍（親屬）', guests:['叔公','叔婆','表姨','表舅','親戚1','親戚2','親戚3','親戚4','親戚5','親戚6','親戚7','（備用）']},
+  {table:'第3圍（朋友1-6號）', guests:['麻鷹','地下鐵','阿圓','阿牛','阿熊','阿豬','阿狗','阿貓','阿魚','（備用）','（備用）','（備用）']},
+  {table:'第4圍（朋友1-6號）', guests:['阿白','阿紫','阿橙','阿黃','阿粉','阿藍','（備用）','（備用）','（備用）','（備用）','（備用）','（備用）']},
+  {table:'第5圍（朋友1-6號）', guests:['THEI Chris Wong','THEI Aries Tang','THEI Ivan Chiu','THEI Fung Tang','WG-Ivan','WG-Ocean','蝦鬚','阿海','金燦燦','銀亮亮','煒仔','（備用）']},
+  {table:'第6圍（FEVAWORKS 1-6）', guests:['Eric Wong','Taylor Yip','Fiona Tang','Candy Fung','Eva Sze','Ling Chan','Ming Chau','Herman Chan','Kent Chan','Terence','（備用）','（備用）']},
+  {table:'第7圍（FEVAWORKS 7-12）', guests:['Kelvin Ma','William','Davy','Miki','Katy','YY','Angel','Venus Wu','胡靜茹','胡秀玲','胡靜怡','（備用）']},
+  {table:'第8圍（朋友）', guests:['陳勤桂（Ran E）','B 阿輝','Angie Kuo','June Tse','阿彩','Henry 阿明','Sandy Yip','吳健明','唐佳傑','林佩文','梁可欣','（備用）']},
+  {table:'第9圍（TINA FD）', guests:['阿梅','阿英','阿珍','陳T','HD-carol','HD-kinson','陳美玲','陳志超','黃美儀','李大文','（備用）','（備用）']},
+  {table:'第10圍（同事）', guests:['Jenny Cheung','Jojo Chitto','友人','Flossie','珊珊','May Leong','Allen Yeung','Henry Lee','Joyce Wong','梁美瑩','（備用）','（備用）']},
+  {table:'第11圍（親友）', guests:['朋友1','朋友2','朋友3','朋友4','朋友5','朋友6','朋友7','朋友8','朋友9','朋友10','（備用）','（備用）']},
+  {table:'第12圍（親友）', guests:['親友1','親友2','親友3','親友4','親友5','親友6','親友7','親友8','親友9','親友10','（備用）','（備用）']},
+  {table:'第13圍（主圍/VIP）', guests:['新郎','新娘','新郎父','新郎母','新娘父','新娘母','Lisa姐','花童','伴郎1','伴娘1','Karu','Kathy']},
+];
+
+const guests = [
+  {name:'陳勤桂（Ran E）',cat:'朋友',table:'第8圍'},
+  {name:'B 阿輝',cat:'朋友',table:'第8圍'},
+  {name:'Angie Kuo',cat:'朋友',table:'第8圍'},
+  {name:'June Tse',cat:'朋友',table:'第8圍'},
+  {name:'阿彩',cat:'朋友',table:'第8圍'},
+  {name:'Henry 阿明',cat:'朋友',table:'第8圍'},
+  {name:'Sandy Yip',cat:'朋友',table:'第8圍'},
+  {name:'吳健明',cat:'朋友',table:'第8圍'},
+  {name:'唐佳傑',cat:'朋友',table:'第8圍'},
+  {name:'林佩文',cat:'朋友',table:'第8圍'},
+  {name:'梁可欣',cat:'朋友',table:'第8圍'},
+  {name:'Eric Wong',cat:'FEVAWORKS',table:'第6圍'},
+  {name:'Taylor Yip',cat:'FEVAWORKS',table:'第6圍'},
+  {name:'Fiona Tang',cat:'FEVAWORKS',table:'第6圍'},
+  {name:'Candy Fung',cat:'FEVAWORKS',table:'第6圍'},
+  {name:'Eva Sze',cat:'FEVAWORKS',table:'第6圍'},
+  {name:'Ling Chan',cat:'FEVAWORKS',table:'第6圍'},
+  {name:'Ming Chau',cat:'FEVAWORKS',table:'第6圍'},
+  {name:'Herman Chan',cat:'FEVAWORKS',table:'第6圍'},
+  {name:'Kent Chan',cat:'FEVAWORKS',table:'第6圍'},
+  {name:'Terence',cat:'FEVAWORKS',table:'第6圍'},
+  {name:'Kelvin Ma',cat:'FEVAWORKS',table:'第7圍'},
+  {name:'William',cat:'FEVAWORKS',table:'第7圍'},
+  {name:'Davy',cat:'FEVAWORKS',table:'第7圍'},
+  {name:'Miki',cat:'FEVAWORKS',table:'第7圍'},
+  {name:'Katy',cat:'FEVAWORKS',table:'第7圍'},
+  {name:'YY',cat:'FEVAWORKS',table:'第7圍'},
+  {name:'Angel',cat:'FEVAWORKS',table:'第7圍'},
+  {name:'Venus Wu',cat:'FEVAWORKS',table:'第7圍'},
+  {name:'THEI Chris Wong',cat:'THEI',table:'第5圍'},
+  {name:'THEI Aries Tang',cat:'THEI',table:'第5圍'},
+  {name:'THEI Ivan Chiu',cat:'THEI',table:'第5圍'},
+  {name:'THEI Fung Tang',cat:'THEI',table:'第5圍'},
+  {name:'WG-Ivan',cat:'朋友',table:'第5圍'},
+  {name:'WG-Ocean',cat:'朋友',table:'第5圍'},
+  {name:'Jenny Cheung',cat:'朋友',table:'第10圍'},
+  {name:'Jojo Chitto',cat:'朋友',table:'第10圍'},
+  {name:'Flossie',cat:'朋友',table:'第10圍'},
+  {name:'May Leong',cat:'朋友',table:'第10圍'},
+  {name:'Allen Yeung',cat:'朋友',table:'第10圍'},
+  {name:'Henry Lee',cat:'朋友',table:'第10圍'},
+  {name:'Joyce Wong',cat:'朋友',table:'第10圍'},
+  {name:'阿梅',cat:'TINA FD',table:'第9圍'},
+  {name:'阿英',cat:'TINA FD',table:'第9圍'},
+  {name:'阿珍',cat:'TINA FD',table:'第9圍'},
+  {name:'陳T',cat:'TINA FD',table:'第9圍'},
+  {name:'HD-carol',cat:'TINA FD',table:'第9圍'},
+  {name:'HD-kinson',cat:'TINA FD',table:'第9圍'},
+  {name:'Karu',cat:'朋友',table:'第13圍'},
+  {name:'Kathy',cat:'朋友',table:'第13圍'},
+];
+
+// ─── RENDER ───
+function renderCountdown(){
+  const now=new Date(), diff=WEDDING_DATE-now;
+  if(diff<=0){document.getElementById('countdown').innerHTML='<div class="cd-box"><div class="num">🎊</div><div class="lbl">今日大喜！</div></div>';return}
+  const d=Math.floor(diff/86400000),h=Math.floor(diff%86400000/3600000),m=Math.floor(diff%3600000/60000),s=Math.floor(diff%60000/1000);
+  document.getElementById('countdown').innerHTML=`
+    <div class="cd-box"><div class="num">${d}</div><div class="lbl">天</div></div>
+    <div class="cd-box"><div class="num">${h}</div><div class="lbl">時</div></div>
+    <div class="cd-box"><div class="num">${m}</div><div class="lbl">分</div></div>
+    <div class="cd-box"><div class="num">${s}</div><div class="lbl">秒</div></div>`;
+}
+setInterval(renderCountdown,1000);renderCountdown();
+
+function renderTimeline(){
+  document.getElementById('timelineContainer').innerHTML=timeline.map(t=>`
+    <div class="tl-item">
+      <div class="tl-time">${t.time}${t.end?' → '+t.end:''} ${t.dur?'('+t.dur+')':''}</div>
+      <div class="tl-title">${t.title}</div>
+      ${t.desc?`<div class="tl-desc">${t.desc}</div>`:''}
+      ${t.roles&&t.roles.length?`<div class="tl-roles">${t.roles.map(r=>`<span class="role-tag">${r}</span>`).join('')}</div>`:''}
+    </div>`).join('');
+}
+
+function renderBudget(){
+  let totalB=0,totalA=0;
+  const cats={};
+  budget.forEach(r=>{
+    const b=(r.qty||0)*(r.unitB||0), a=(r.qty2||0)*(r.unitA||0);
+    totalB+=b; totalA+=a;
+    if(!cats[r.cat])cats[r.cat]={b:0,a:0};
+    cats[r.cat].b+=b; cats[r.cat].a+=a;
+  });
+  document.getElementById('budgetSummary').innerHTML=`
+    <div class="bsum"><div class="val">$${totalB.toLocaleString()}</div><div class="lbl">預算總計</div></div>
+    <div class="bsum"><div class="val">$${totalA.toLocaleString()}</div><div class="lbl">實際總計</div></div>
+    <div class="bsum"><div class="val ${totalA-totalB>=0?'neg':'pos'}">$${Math.abs(totalA-totalB).toLocaleString()}</div><div class="lbl">${totalA-totalB>=0?'超支':'節省'}</div></div>
+    <div class="bsum"><div class="val">${Object.keys(cats).length}</div><div class="lbl">分類</div></div>`;
+  let html='',lastCat='';
+  budget.forEach(r=>{
+    if(r.cat!==lastCat){
+      const c=cats[r.cat];
+      html+=`<tr class="cat-row"><td colspan="2"><b>【${r.cat}】</b></td><td>$${c.b.toLocaleString()}</td><td>$${c.a.toLocaleString()}</td><td class="${c.a-c.b>=0&&c.b>0?'neg':'pos'}">${c.b>0||c.a>0?'$'+(Math.abs(c.a-c.b)).toLocaleString():'-'}</td></tr>`;
+      lastCat=r.cat;
+    }
+    const b=(r.qty||0)*(r.unitB||0), a=(r.qty2||0)*(r.unitA||0), diff=a-b;
+    html+=`<tr><td></td><td>${r.item}</td><td>${b?'$'+b.toLocaleString():'-'}</td><td>${a?'$'+a.toLocaleString():'-'}</td><td class="${diff>0?'neg':diff<0?'pos':''}">${(b||a)&&diff!==0?'$'+Math.abs(diff).toLocaleString():'-'}</td></tr>`;
+  });
+  document.getElementById('budgetBody').innerHTML=html;
+}
+
+function renderChecklist(){
+  const saved=JSON.parse(localStorage.getItem('wedding_checks')||'{}');
+  let total=0,done=0;
+  let html='';
+  Object.entries(checklist).forEach(([grp,items])=>{
+    html+=`<div class="check-group"><h3>📌 ${grp}</h3>`;
+    items.forEach((item,i)=>{
+      const key=grp+':'+i;
+      const checked=saved[key]||false;
+      if(checked)done++; total++;
+      html+=`<div class="check-item${checked?' done':''}" id="ci-${key.replace(/[^a-z0-9]/gi,'_')}">
+        <input type="checkbox" id="cb_${key.replace(/[^a-z0-9]/gi,'_')}" ${checked?'checked':''} onchange="toggleCheck('${key}',this.checked)">
+        <label for="cb_${key.replace(/[^a-z0-9]/gi,'_')}">${item}</label>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  document.getElementById('checklistContainer').innerHTML=html;
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('checkBar').style.width=pct+'%';
+  document.getElementById('checkProgress').textContent=`已完成 ${done} / ${total} 項（${pct}%）`;
+}
+function toggleCheck(key,val){
+  const saved=JSON.parse(localStorage.getItem('wedding_checks')||'{}');
+  saved[key]=val; localStorage.setItem('wedding_checks',JSON.stringify(saved));
+  renderChecklist();
+}
+
+function renderContacts(){
+  document.getElementById('contactsContainer').innerHTML=contacts.map(c=>`
+    <div class="contact-card">
+      <div class="contact-icon">${c.icon}</div>
+      <div class="contact-info">
+        <div class="name">${c.name}</div>
+        <div class="role">${c.role}</div>
+        ${c.phone?`<div class="phone"><a href="tel:${c.phone}">📞 ${c.phone}</a></div>`:''}
+        ${c.email?`<div class="phone"><a href="mailto:${c.email}">✉️ ${c.email}</a></div>`:''}
+      </div>
+    </div>`).join('');
+}
+
+function renderSeating(){
+  document.getElementById('seatingGrid').innerHTML=seating.map(t=>`
+    <div class="table-card">
+      <h3>🪑 ${t.table}</h3>
+      ${t.guests.map((g,i)=>`<div class="seat-item"><div class="seat-num">${i+1}</div>${g}</div>`).join('')}
+    </div>`).join('');
+}
+
+function renderGuests(){
+  document.getElementById('guestBody').innerHTML=guests.map((g,i)=>`
+    <tr><td>${i+1}</td><td>${g.name}</td><td>${g.cat}</td><td>${g.table}</td></tr>`).join('');
+}
+function filterGuests(q){
+  const rows=document.querySelectorAll('#guestBody tr');
+  rows.forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q.toLowerCase())?'':'none'});
+}
+
+function switchTab(name){
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+renderTimeline();renderBudget();renderChecklist();renderContacts();renderSeating();renderGuests();
+</script>
+</body>
+</html>
