@@ -620,8 +620,9 @@ function renderPrep(){
 function togglePrep(key,val){
   const saved=JSON.parse(localStorage.getItem('wedding_prep')||'{}');
   saved[key]=val; localStorage.setItem('wedding_prep',JSON.stringify(saved));
-  
+  renderPrep();
 }
+renderTimeline();renderBudget();renderChecklist();renderContacts();renderSeating();renderGuests();renderPrep();
 </script>
 </body>
 </html>
